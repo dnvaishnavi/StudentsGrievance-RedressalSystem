@@ -1,0 +1,4 @@
+Students Grievance redressal system
+
+The system addresses students complaints and Grievances.
+-The complaints are categorized and sent to respective authorities.
