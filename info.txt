@@ -1,4 +1,36 @@
 Students Grievance redressal system
 
-The system addresses students complaints and Grievances.
--The complaints are categorized and sent to respective authorities.
+ *Requirements*
+
+*Functional Requirements*
+
+1. *User Account Management*
+
+   * Student registration and login using unique ID and password.
+   * Ability to view personal complaint history and statistics.
+
+2. *Complaint Submission*
+
+   * File a new complaint with category selection and description.
+   * Option to attach relevant files or evidence.
+
+3. *Complaint Categorization & Tracking*
+
+   * View categorized complaints with their status (resolved, unresolved, in-progress).
+   * Display statistics using pie charts or graphs.
+
+4. *Admin/Authority Dashboard*
+
+   * View daily complaint counts and details.
+   * Mark complaints as resolved or forward them to higher authorities.
+   * Escalation of unresolved complaints after a set period (e.g., 7 days).
+
+5. *Department Forwarding System*
+
+   * Automatically route categorized complaints to relevant authorities (HODs, campus maintenance, security, etc.).
+
+6. *Analytics & Reporting*
+
+   * Calculate and display resolution rates and response times.
+   * Generate reports for administrative review.
+
