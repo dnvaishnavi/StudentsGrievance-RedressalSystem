@@ -1,0 +1,5 @@
+{"terminal.integrated.env.windows": {
+    "PATH": "C:\\Program Files\\apache-maven-3.9.11\\bin;${env:PATH}"
+},
+"java.configuration.updateBuildConfiguration": "interactive"
+}

@@ -4,5 +4,12 @@ In many educational institutions, students face challenges in effectively raisin
 
 *Proposed Solution*
 
-The proposed Students Grievance and Complaints Support & Re-addressal System is a centralized web-based platform that enables students to submit complaints, track their status, and receive timely updates. Each user will have a personal account to file, categorize, and view complaint history. The system will display complaint statistics using visual charts, showing the number of resolved, unresolved, and in-progress cases.
-On the administrative side, authorized staff can view daily complaint reports, categorize them, mark resolutions, and escalate serious or unresolved complaints to higher authorities within a set time frame. The system will also monitor response and resolution rates to improve accountability. Categorized complaints will be forwarded to the respective departments (HODs, campus authorities, security, etc.) for quicker action. This solution ensures transparency, structured communication, faster resolution, and an organized record of all complaints for future reference.
+The proposed Students Grievance and Complaints Support & Re-addressal System is a centralized web-based platform that enables students to submit complaints, track their status, and receive timely updates. 
+
+This system provides students with a platform to submit their grievances online
+and track the resolution status efficiently.
+
+Current Features:
+- Grievance submission through an online form
+- Tracking the status of submitted issues
+- Admin/authority panel to review and resolve grievances
