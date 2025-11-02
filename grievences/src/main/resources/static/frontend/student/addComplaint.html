@@ -90,32 +90,60 @@
   <script>
     const form = document.getElementById("complaintForm");
 
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
+  form.addEventListener("submit", async function (e) {
+    e.preventDefault();
 
-      const title = document.getElementById("complaintTitle").value.trim();
-      const desc = document.getElementById("description").value.trim();
+    const subject = document.getElementById('complaintTitle').value.trim();
+    const description = document.getElementById('description').value.trim();
+    const suggestions = document.getElementById('suggestions').value.trim();
 
-      if (!title || !desc) {
-        alert("Please fill in all required fields.");
-        return;
-      }
-
-      // For now, show success popup
-      const alertBox = document.createElement("div");
-      alertBox.className = "alert alert-success text-center mt-3";
-      alertBox.innerHTML = `
-        <strong>Complaint Submitted Successfully!</strong><br>
-        <button class="btn btn-sm btn-primary mt-2" onclick="goBack()">Go to Dashboard</button>
-      `;
-      form.appendChild(alertBox);
-
-      form.reset();
-    });
-
-    function goBack() {
-      window.location.href = "studentProfile.html";
+    if (!subject || !description) {
+      alert("Please fill in all required fields.");
+      return;
     }
-  </script>
+
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (!user || !user.userId) {
+      alert("Please log in first.");
+      window.location.href = "login.html";
+      return;
+    }
+
+    
+    try {
+      const res = await fetch('http://localhost:9090/api/grievances', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+      subject,
+      description,
+      suggestions,
+      user: { userId: user.userId }
+    })
+      });
+
+      if (res.ok) {
+        const alertBox = document.createElement("div");
+        alertBox.className = "alert alert-success text-center mt-3";
+        alertBox.innerHTML = `
+          <strong>Complaint Submitted Successfully!</strong><br>
+          <button class="btn btn-sm btn-primary mt-2" onclick="goBack()">Go to Dashboard</button>
+        `;
+        form.appendChild(alertBox);
+        form.reset();
+      } else {
+        const errorText = await res.text();
+        alert("Submission failed: " + errorText);
+      }
+    } catch (error) {
+      console.error("Network error:", error);
+      alert("Could not connect to the server.");
+    }
+  });
+
+  function goBack() {
+    window.location.href = "studentProfile.html";
+  }
+</script>
 </body>
 </html>

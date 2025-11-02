@@ -25,6 +25,31 @@
         <label for="email" class="form-label">Email</label>
         <input type="email" id="email" class="form-control" placeholder="Enter email" required />
       </div>
+      <div class="row mb-3">
+  <div class="col-md-6">
+    <label for="department" class="form-label">Department</label>
+    <input
+      type="text"
+      id="department"
+      class="form-control"
+      placeholder="Enter department (CS, IT...)"
+      required
+    />
+  </div>
+
+  <div class="col-md-6">
+    <label for="year" class="form-label">Year</label>
+    <input
+      type="number"
+      id="year"
+      class="form-control"
+      placeholder="Enter year"
+      min="1"
+      max="4"
+      required
+    />
+  </div>
+</div>
 
       <div class="mb-3">
         <label for="password" class="form-label">Password</label>
@@ -65,7 +90,7 @@
 
   <script>
     
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', async function () {
       const registerForm = document.getElementById('registerForm');
       const successModalEl = document.getElementById('successModal');
       const goToLoginBtn = document.getElementById('goToLoginBtn');
@@ -78,36 +103,44 @@
 
       const successModal = new bootstrap.Modal(successModalEl);
 
-      registerForm.addEventListener('submit', function (e) {
+      registerForm.addEventListener('submit',async function (e) {
         e.preventDefault();
 
         const username = document.getElementById('username').value.trim();
         const password = document.getElementById('password').value.trim();
         const email =document.getElementById('email').value.trim();
+        const department= document.getElementById('department').value;
+        const year= document.getElementById('year').value;
 
-        if (!username || !password || !email) {
+        if (!username || !password || !email||!department||!year) {
           alert('Please fill all fields!');
           return;
         }
 
-        const users = JSON.parse(localStorage.getItem('users') || '[]');
-        if (users.find(u => u.username === username)) {
-          alert('Username already exists!');
-          return;
-        }
-        /// db
-        users.push({ username, password, email,role: 'STUDENT' });
-        localStorage.setItem('users', JSON.stringify(users));
+        try{
+             const res = await fetch('http://localhost:9090/api/users/register', {
+               method: 'POST',
+               headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({username,email,password,department,year})
+  });
 
-        // Show the modal
-        successModal.show();
-      });
+      if (res.ok) {
+        successModal.show(); // show success message
+      } else {
+        const errMsg = await res.text();
+        alert('Registration failed: ' + errMsg);
+      }
 
-      // Redirect when "Go to Login" clicked
-      goToLoginBtn.addEventListener('click', function () {
-        window.location.href = 'login.html';
-      });
-    });
+    } catch (error) {
+      console.error('Network error:', error);
+      alert('Could not connect to the server');
+    }
+  });
+
+  goToLoginBtn.addEventListener('click', function () {
+    window.location.href = 'login.html';
+  });
+});
   </script>
 </body>
 </html>

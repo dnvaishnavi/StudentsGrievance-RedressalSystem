@@ -1,25 +1,32 @@
 package com.example.grievences.controller;
 
 import com.example.grievences.model.User;
-import com.example.grievences.service.UserService;
+import com.example.grievences.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
-@RequestMapping("/api/auth")
-@CrossOrigin(origins = "*")
+@RequestMapping("/api/users")
+@CrossOrigin("*")
 public class AuthController {
-    private final UserService userService;
-    public AuthController(UserService userService) {
-        this.userService = userService;
-    }
+
+    @Autowired
+    private UserRepository userRepository;
 
     @PostMapping("/register")
     public User register(@RequestBody User user) {
-        return userService.register(user);
+        return userRepository.save(user);
     }
 
     @PostMapping("/login")
     public User login(@RequestBody User user) {
-        return userService.login(user.getUsername(), user.getPassword());
+        Optional<User> existing = userRepository.findByUsername(user.getUsername());
+        if (existing.isPresent() && existing.get().getPassword().equals(user.getPassword())) {
+            return existing.get();
+        } else {
+            throw new RuntimeException("Invalid credentials");
+        }
     }
 }

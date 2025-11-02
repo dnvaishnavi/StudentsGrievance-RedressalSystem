@@ -45,10 +45,27 @@
   if (username === "admin" && password === "admin123") {
     window.location.href = "./admin/dashboard.html";
   } else {
-    // For now, all other users treated as students
-    window.location.href = "./student/studentProfile.html";
-  }
-});
+    try {
+        const res = await fetch('http://localhost:9090/api/users/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+        if (!res.ok) {
+          alert('Login failed');
+          return;
+        }
+        const user = await res.json();
+        localStorage.setItem('user', JSON.stringify(user));
+        if (user.role === 'STUDENT')
+        window.location = './student/studentProfile.html';
+      } catch (err) {
+        alert('Network error');
+        console.error(err);
+      }
+    }
+    });
+ 
 
   </script>
 </body>

@@ -2,36 +2,41 @@ package com.example.grievences.service;
 
 import com.example.grievences.model.Grievence;
 import com.example.grievences.repository.GrievenceRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 public class GrievenceService {
-    private final GrievenceRepository grievenceRepository;
 
-    public GrievenceService(GrievenceRepository grievenceRepository) {
-        this.grievenceRepository = grievenceRepository;
+    @Autowired
+    private GrievenceRepository grievenceRepository;
+
+    public Grievence addGrievence(Grievence grievence) {
+        return grievenceRepository.save(grievence);
     }
 
-    public Grievence submitGrievance(Grievence grievance) {
-        grievance.setStatus("Pending");
-        grievance.setCreatedAt(LocalDateTime.now());
-        return grievenceRepository.save(grievance);
-    }
-
-    public List<Grievence> getAllGrievances() {
+    public List<Grievence> getAllGrievences() {
         return grievenceRepository.findAll();
     }
 
-    public Grievence getGrievanceById(Long id) {
-        return grievenceRepository.findById(id).orElse(null);
+    public List<Grievence> getGrievencesByUser(Long userId) {
+        return grievenceRepository.findByUserUserId(userId);
     }
 
     public Grievence updateStatus(Long id, String status) {
-        Grievence grievance = grievenceRepository.findById(id).orElseThrow();
-        grievance.setStatus(status);
-        grievance.setUpdatedAt(LocalDateTime.now());
-        return grievenceRepository.save(grievance);
+        Grievence g = grievenceRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Grievance not found"));
+        g.setStatus(status);
+        return grievenceRepository.save(g);
+    }
+
+    public void deleteGrievence(Long id) {
+        grievenceRepository.deleteById(id);
+    }
+
+    public List<Grievence> findByUserUserId(Long userId) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'findByUserUserId'");
     }
 }
