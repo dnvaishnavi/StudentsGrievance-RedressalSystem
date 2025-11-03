@@ -7,4 +7,7 @@ import java.util.List;
 
 @Repository
 public interface GrievenceRepository extends JpaRepository<Grievence, Long> {
-    List<Grievence> findByUserUserId(Long userId); }
+    List<Grievence> findByUserUserId(Long userId); 
+    List<Grievence> findBySubjectContainingIgnoreCaseOrDescriptionContainingIgnoreCase(String subject, String description);
+    List<Grievence> findTop5ByOrderByIdDesc();
+}

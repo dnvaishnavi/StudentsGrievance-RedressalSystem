@@ -111,7 +111,7 @@
 
     
     try {
-      const res = await fetch('http://localhost:9090/api/grievances', {
+      const res = await fetch('http://localhost:9090/api/grievances/add', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
