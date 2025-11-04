@@ -3,7 +3,7 @@ let complaints = [];
 // Fetch complaints from backend (showing last 5)
 async function loadComplaints() {
   try {
-    const res = await fetch("http://localhost:9090/api/grievences/all");
+    const res = await fetch("http://localhost:9090/api/grievances/all");
     const data = await res.json();
     complaints = data.reverse().slice(0, 5); // recent 5 only
     displayComplaints(complaints);
@@ -21,8 +21,8 @@ function displayComplaints(list) {
     const tr = document.createElement("tr");
     tr.innerHTML = `
       <td>${c.id}</td>
-      <td>${c.title}</td>
-      <td>${c.status}</td>
+      <td>${c.subject}</td>
+      <td><span class="badge ${getStatusBadge(c.status)}">${c.status}</span></td>
       <td>${c.actionTaken || "-"}</td>
       <td><button class="btn btn-sm btn-outline-primary" onclick="openEditModal(${c.id})">Edit</button></td>
     `;
@@ -30,11 +30,18 @@ function displayComplaints(list) {
   });
 }
 
+function getStatusBadge(status) {
+  if (status === "Resolved") return "bg-success";
+  if (status === "Pending") return "bg-warning text-dark";
+  if (status === "In Progress") return "bg-info text-dark";
+  return "bg-secondary";
+}
+
 // Search functionality
 function searchComplaints() {
   const term = document.getElementById("searchInput").value.toLowerCase();
   const filtered = complaints.filter(c =>
-    c.title.toLowerCase().includes(term) ||
+    c.subject.toLowerCase().includes(term) ||
     c.status.toLowerCase().includes(term) ||
     c.id.toString().includes(term)
   );
@@ -55,6 +62,8 @@ function openEditModal(id) {
   if (!c) return;
   document.getElementById("editId").value = c.id;
   document.getElementById("editStatus").value = c.status;
+    document.getElementById("editDescription").value = c.description || "No description available";
+  document.getElementById("editSuggestions").value = c.suggestions || "";
   document.getElementById("editAction").value = c.actionTaken || "";
   new bootstrap.Modal(document.getElementById("editModal")).show();
 }
@@ -68,7 +77,7 @@ async function saveEdit() {
   };
 
   try {
-    const res = await fetch(`http://localhost:9090/api/grievences/user/${id}`, {
+    const res = await fetch(`http://localhost:9090/api/grievances/user/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(updated)
@@ -83,6 +92,11 @@ async function saveEdit() {
   } catch (err) {
     console.error("Error updating complaint:", err);
   }
+}
+
+function logout() {
+  alert("You have been logged out!");
+  window.location.href = "../login.html";
 }
 
 // Load on page start
