@@ -2,26 +2,36 @@ pipeline {
     agent any
 
     tools {
-        maven 'Maven_3'
         jdk 'JDK_21'
+        maven 'Maven_3'
     }
 
     stages {
         stage('Checkout Code') {
             steps {
-                checkout scm
+                git branch: 'feature/ci', url: 'https://github.com/dnvaishnavi/StudentsGrievance-RedressalSystem.git'
             }
         }
 
         stage('Build Project') {
             steps {
-                bat 'mvn clean package -DskipTests'
+                dir('grievences') {
+                    bat 'mvn clean package -DskipTests'
+                }
+            }
+        }
+
+        stage('Test Project') {
+            steps {
+                dir('grievences') {
+                    bat 'mvn test'
+                }
             }
         }
 
         stage('Post Actions') {
             steps {
-                echo '✅ Build completed successfully in Jenkins!'
+                echo '✅ Build completed successfully!'
             }
         }
     }
