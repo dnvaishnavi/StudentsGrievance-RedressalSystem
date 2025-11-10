@@ -1,0 +1,34 @@
+pipeline {
+    agent any
+
+    tools {
+        maven 'Maven_3'
+        jdk 'JDK_21'
+    }
+
+    stages {
+        stage('Checkout Code') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Build Project') {
+            steps {
+                sh 'mvn clean package -DskipTests'
+            }
+        }
+
+        stage('Post Actions') {
+            steps {
+                echo '✅ Build completed successfully in Jenkins!'
+            }
+        }
+    }
+
+    post {
+        failure {
+            echo '❌ Build failed! Check console logs for details.'
+        }
+    }
+}
