@@ -2,9 +2,9 @@ name: Java CI Build
 
 on:
   push:
-    branches: [ "main" ]      # or your branch name
+    branches: [ "*" ]      # run on all branches
   pull_request:
-    branches: [ "main" ]
+    branches: [ "*" ]
 
 jobs:
   build:
